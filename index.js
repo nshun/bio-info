@@ -1,4 +1,3 @@
-const argv = require('optimist').argv;
 const calcTable = require('./calc-table');
 const dnas = require('./src/dna.json');
 const makeAlignment = require('./make-alignment');
