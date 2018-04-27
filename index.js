@@ -10,6 +10,9 @@ const makeAlignment = require('./make-alignment');
 		dnas: dnas,
 		table: await calcTable(dnas.a, dnas.b)
 	};
-	console.log(data.table);
-	makeAlignment(data);
+	const result = {
+		score: data.table[data.table.length - 1][data.table[0].length - 1].score,
+		alignments: await makeAlignment(data)
+	};
+	console.log(JSON.stringify(result, null, 1));
 })();
