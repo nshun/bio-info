@@ -1,8 +1,8 @@
 class Cell {
-	constructor(row, col, origin, score) {
+	constructor(row, col, origins, score) {
 		this.row = row;
 		this.col = col;
-		this.origin = origin;
+		this.origins = origins;
 		this.score = score;
 	}
 }
@@ -12,16 +12,18 @@ const selectOrigin = async (froms, to) => {
 		to.score = 0;
 		return to;
 	} else {
-		let origin;
+		const origins = [];
+		let bestScore;
 		for (const from of froms) {
-			if (origin) {
-				origin = origin.score < from.score ? from : origin;
-			} else {
-				origin = from;
-			}
+			bestScore = bestScore != null && from.score < bestScore ?
+				bestScore : from.score;
 		}
-		to.origin = origin.node;
-		to.score = origin.score;
+		for (const from of froms) {
+			if (from.score === bestScore)
+				origins.push(from.cell);
+		}
+		to.origins = origins;
+		to.score = bestScore;
 		return to;
 	}
 }
@@ -37,18 +39,17 @@ const makeTable = async (dnaA, dnaB) => {
 		for (let col = 0; col < table[row].length; col++) {
 			const froms = [];
 			const to = new Cell(row, col, null, null);
-			let origin;
 			if (0 < col) froms.push({
-				node: table[row][col - 1],
+				cell: table[row][col - 1],
 				score: table[row][col - 1].score - 2
 			});
 			if (0 < row && 0 < col) froms.push({
-				node: table[row - 1][col - 1],
+				cell: table[row - 1][col - 1],
 				score: x[row - 1] === y[col - 1] ?
 					table[row - 1][col - 1].score + 2 : table[row - 1][col - 1].score - 1
 			})
 			if (0 < row) froms.push({
-				node: table[row - 1][col],
+				cell: table[row - 1][col],
 				score: table[row - 1][col].score - 2
 			});
 			table[row][col] = await selectOrigin(froms, to);
@@ -59,7 +60,7 @@ const makeTable = async (dnaA, dnaB) => {
 
 const start = async (dnaA, dnaB) => {
 	const table = await makeTable(dnaA, dnaB);
-	console.log(table);
+	return table ? table : new Error('empty table');
 }
 
 module.exports = start;
