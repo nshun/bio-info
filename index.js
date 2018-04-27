@@ -11,6 +11,7 @@ const makeAlignment = require('./make-alignment');
 		table: await calcTable(dnas.a, dnas.b)
 	};
 	const result = {
+		inputs: dnas,
 		score: data.table[data.table.length - 1][data.table[0].length - 1].score,
 		alignments: await makeAlignment(data)
 	};
