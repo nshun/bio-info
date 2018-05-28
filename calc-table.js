@@ -7,7 +7,7 @@ class Cell {
 	}
 }
 
-const selectOrigin = async (froms, to) => {
+const selectOrigin = async (froms, to, multiSearchFlag) => {
 	if (froms.length === 0) {
 		to.score = 0;
 		return to;
@@ -19,8 +19,10 @@ const selectOrigin = async (froms, to) => {
 				bestScore : from.score;
 		}
 		for (const from of froms) {
-			if (from.score === bestScore)
+			if (from.score === bestScore) {
 				origins.push(from.cell);
+				if (!multiSearchFlag) break;
+			}
 		}
 		to.origins = origins;
 		to.score = bestScore;
@@ -28,7 +30,7 @@ const selectOrigin = async (froms, to) => {
 	}
 }
 
-const makeTable = async (dnaA, dnaB) => {
+const makeTable = async (dnaA, dnaB, multiSearchFlag) => {
 	const x = dnaA.split('');
 	const y = dnaB.split('');
 	const table = new Array(dnaA.length + 1);
@@ -52,14 +54,15 @@ const makeTable = async (dnaA, dnaB) => {
 				cell: table[row - 1][col],
 				score: table[row - 1][col].score - 2
 			});
-			table[row][col] = await selectOrigin(froms, to);
+			table[row][col] = await selectOrigin(froms, to, multiSearchFlag);
 		}
 	}
 	return table;
 }
 
-const start = async (dnaA, dnaB) => {
-	const table = await makeTable(dnaA, dnaB);
+const start = async (dnaA, dnaB, options) => {
+	const multiSearchFlag = options && options.multiSearch ? true : false;
+	const table = await makeTable(dnaA, dnaB, multiSearchFlag);
 	return table ? table : new Error('empty table');
 }
 

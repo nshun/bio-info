@@ -1,4 +1,4 @@
-class Alignment {
+class Alignments {
 	constructor(a, b) {
 		this.a = a ? a : '';
 		this.b = b ? b : '';
@@ -17,7 +17,7 @@ const addAlignment = async (alignments, aliNum, cell, dnas) => {
 		const oldAlignment = clone(alignments[aliNum]);
 		for (let i = 1; i < origins.length; i++) {
 			const origin = origins[i];
-			alignments.push(new Alignment(oldAlignment.a, oldAlignment.b));
+			alignments.push(new Alignments(oldAlignment.a, oldAlignment.b));
 			const aliNum = alignments.length - 1;
 			const toA = cell.row !== origin.row ? dnas.a[origin.row] : '-';
 			const toB = cell.col !== origin.col ? dnas.b[origin.col] : '-';
@@ -39,7 +39,7 @@ const make = async (data) => {
 	const alignments = [];
 	let row = data.table.length - 1;
 	let col = data.table[0].length - 1;
-	alignments.push(new Alignment());
+	alignments.push(new Alignments());
 	await addAlignment(alignments, 0, data.table[row][col], data.dnas);
 	return alignments;
 }
