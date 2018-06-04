@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "csv-parse": "^2.4.0",
     "optimist": "^0.6.1"
   },
   "devDependencies": {},

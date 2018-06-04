@@ -8,7 +8,10 @@
 			"type": "node",
 			"request": "launch",
 			"name": "プログラムの起動",
-			"program": "${workspaceFolder}\\index.js"
+			"program": "${workspaceFolder}\\index.js",
+			"args": [
+				"--kind=global"
+			]
 		}
 	]
 }
