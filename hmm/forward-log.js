@@ -1,3 +1,5 @@
+const convert2log = require('../convert2log.js')
+
 class T {
 	constructor(prob = null, scale = null) {
 		this.prob = prob;
@@ -6,6 +8,9 @@ class T {
 }
 
 async function forward(observs, states, sp, tp, ep) {
+	await convert2log(sp);
+	await convert2log(tp);
+	await convert2log(ep);
 	let Ts = [];
 	for (const st of states) {
 		Ts[st] = new T(sp[st] + ep[st][observs[0]]);
