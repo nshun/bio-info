@@ -22,7 +22,7 @@ async function forward(observs, states, sp, tp, ep) {
 	for (const t in Ts) {
 		sum += Math.exp(Ts[t]["prob"]);
 	}
-	return new T(Math.log(sum));
+	return new T(sum);
 }
 
 

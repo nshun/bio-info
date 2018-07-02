@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 const states = ["F", "L"];
 const start_prob = {
 	"F": 0.5,
@@ -32,21 +34,22 @@ const emiss_prob = {
 	}
 }
 
-async function calc(options) {
+async function calc(argv) {
 	const {
 		observations
 	} = require('../src/example-hmm');
-	const calc = require('./forward-scale.js'); // require('./viterbi.js');
+	const methodpath = path.resolve(argv.method ?
+		`./hmm/${argv.method}.js` : `./hmm/viterbi.js`);
+	if (!fs.existsSync(methodpath) || !fs.statSync(methodpath).isFile())
+		return Promise.reject(new Error(`method=${argv.method} is not found.`));
+	const calc = require(methodpath);
 	const result = await calc(observations.split(''), states,
 		start_prob, trans_prob, emiss_prob);
 	return {
 		input: {
 			observations: observations
 		},
-		output: {
-			prob: Math.exp(result["prob"]),
-			path: result["label"]
-		}
+		output: result
 	}
 }
 

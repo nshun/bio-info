@@ -22,6 +22,7 @@ async function viterbi(observs, states, sp, tp, ep) {
 	for (const t in Ts) {
 		if (!maxT || maxT["prob"] < Ts[t]["prob"]) maxT = Ts[t];
 	}
+	maxT["prob"] = Math.exp(maxT["prob"]);
 	return maxT;
 }
 
