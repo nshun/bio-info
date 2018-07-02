@@ -58,6 +58,4 @@ typings/
 .env
 
 # custom
-.pdf
-.docx
-
+*.pdf
