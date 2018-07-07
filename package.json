@@ -15,7 +15,8 @@
     "hw2": "node index.js --kind=local --src=../src/dest100.json --loop=10",
     "hw3": "node index.js --kind=global",
     "hw5": "node index.js --kind=hmm --method=viterbi",
-    "hw6": "node index.js --kind=hmm --method=forward-log && node index.js --kind=hmm --method=forward-scale"
+    "hw6": "node index.js --kind=hmm --method=forward-log && node index.js --kind=hmm --method=forward-scale",
+    "hw7": "node index.js --kind=hmm --method=backward-log"
   },
   "repository": {
     "type": "git",
