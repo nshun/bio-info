@@ -1,5 +1,6 @@
 const fs = require('fs');
-const path = require('path');
+const p = require('path');
+const ratio2prob = require('../utilities/ratio2prob');
 
 async function calc(argv) {
 	const {
@@ -11,8 +12,13 @@ async function calc(argv) {
 	const {
 		observations,
 		actual_path
-	} = require('../src/example-hmm-imput');
-	const methodpath = path.resolve(argv.method ?
+	} = require('../src/example-hmm-input');
+
+	const start_prob = await ratio2prob(start_ratio);
+	const trans_prob = await ratio2prob(trans_ratio);
+	const emiss_prob = await ratio2prob(emiss_ratio);
+
+	const methodpath = p.resolve(argv.method ?
 		`./hmm/${argv.method}.js` : `./hmm/viterbi.js`);
 	if (!fs.existsSync(methodpath) || !fs.statSync(methodpath).isFile())
 		return Promise.reject(new Error(`method=${argv.method} is not found.`));
@@ -28,6 +34,7 @@ async function calc(argv) {
 		}
 		result["match"] = correct_cnt / pathT.length;
 	}
+
 	return {
 		input: {
 			observations: observations
