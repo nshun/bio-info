@@ -1,8 +1,7 @@
 const arr2obj = require('../arr2obj');
 
 class T {
-	constructor(prob = null, variable, scale) {
-		this.prob = prob;
+	constructor(variable, scale) {
 		this.variable = variable;
 		this.scale = scale;
 	}
@@ -11,7 +10,7 @@ class T {
 async function backward(observs, states, sp, tp, ep) {
 	let Ts = [];
 	for (const l of states) {
-		Ts[l] = new T(1, 1, 1);
+		Ts[l] = new T(1, 1);
 	}
 	for (let i = 0; i < observs.length - 1; i++) {
 		const l = observs.length - i - 1;
@@ -43,8 +42,7 @@ async function prev_state(ob, states, Ts, tp, ep) {
 			sumF += tp[l][k] * Ts[k]["variable"] * ep[l][ob];
 		}
 		const variable = sumF / scale;
-		const prob = ep[l][ob] / piS * variable;
-		Us[l] = new T(prob, variable, piS * scale);
+		Us[l] = new T(variable, piS * scale);
 	}
 	return Us;
 }

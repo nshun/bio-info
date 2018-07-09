@@ -15,7 +15,7 @@ async function posterior(observs, states, sp, tp, ep) {
         let max_prob = 0;
         let max_label = '';
         for (const state of states) {
-            const merged_prob = forward_prob[state]["prob"]; //* backward_prob[state]["prob"];
+            const merged_prob = forward_prob[state]["variable"] * backward_prob[state]["variable"];
             if (max_prob < merged_prob) {
                 max_prob = merged_prob;
                 max_label = state;
