@@ -30,26 +30,28 @@ async function compare(options) {
     const trans_prob = await ratio2prob(trans_ratio);
     const emiss_prob = await ratio2prob(emiss_ratio);
 
-    const loop = options && options.loop ? parseInt(options.loop) : 1000;
+    const loop = options && options.loop ? parseInt(options.loop) : 100;
     const length = options && options.length ? parseInt(options.length) : 10000;
-    const input = await createInput(states, start_prob, trans_prob, emiss_prob, length);
-
-    const base_options = {
-        model: require('@src/example-hmm-model'),
-        input: input
-    }
     const viterbi_matches = [];
     const posteri_matches = [];
 
     for (let i = 0; i < loop; i++) {
+        const input = await createInput(states, start_prob, trans_prob, emiss_prob, length);
+        const base_options = {
+            model: require('@src/example-hmm-model'),
+            input: input
+        }
         const resultOne = await runOnce(base_options);
         viterbi_matches.push(resultOne["viterbi_match"]);
         posteri_matches.push(resultOne["posteri_match"]);
     }
     return {
-        loop: viterbi_matches.length,
-        viterbi_matches_avg: average(await viterbi_matches),
-        posteri_matches_avg: average(await posteri_matches)
+        result: {
+            loop: viterbi_matches.length,
+            length: length,
+            viterbi_matches_avg: average(await viterbi_matches),
+            posteri_matches_avg: average(await posteri_matches)
+        }
     }
 }
 

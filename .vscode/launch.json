@@ -12,8 +12,8 @@
 			"args": [
 				"--kind=hmm",
 				"--method=compare",
-				"--loop=1",
-				"--length=300"
+				"--loop=100",
+				"--length=10000"
 			]
 		}
 	]
