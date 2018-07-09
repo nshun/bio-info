@@ -5,8 +5,13 @@
   "main": "index.js",
   "dependencies": {
     "csv-parse": "^2.4.0",
+    "module-alias": "^2.1.0",
     "optimist": "^0.6.1",
     "path": "^0.12.7"
+  },
+  "_moduleAliases": {
+    "@src": "lib",
+    "@utilities": "utilities"
   },
   "devDependencies": {},
   "scripts": {

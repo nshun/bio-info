@@ -1,4 +1,4 @@
-const arr2obj = require('../utilities/arr2obj');
+const arr2obj = require('@utilities/arr2obj');
 
 class T {
 	constructor(variable, scale) {

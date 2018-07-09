@@ -1,4 +1,4 @@
-const convert2log = require('../convert2log.js')
+const convert2log = require('@utilities/convert2log')
 
 class T {
 	constructor(prob = null, path = "") {

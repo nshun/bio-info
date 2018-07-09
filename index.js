@@ -1,5 +1,6 @@
 const fs = require('fs');
 let argv = require('optimist').argv;
+require('module-alias/register');
 
 (async function main() {
 	if (!argv.kind)
