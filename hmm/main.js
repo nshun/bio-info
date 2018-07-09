@@ -36,7 +36,8 @@ const emiss_prob = {
 
 async function calc(argv) {
 	const {
-		observations
+		observations,
+		actual_path
 	} = require('../src/example-hmm');
 	const methodpath = path.resolve(argv.method ?
 		`./hmm/${argv.method}.js` : `./hmm/viterbi.js`);
@@ -45,6 +46,15 @@ async function calc(argv) {
 	const calc = require(methodpath);
 	const result = await calc(observations.split(''), states,
 		start_prob, trans_prob, emiss_prob);
+	if (result && result["path"]) {
+		const pathT = actual_path.split('');
+		const pathE = result["path"].split('');
+		let correct_cnt = 0;
+		for (let i = 0; i < pathT.length; i++) {
+			if (pathT[i] === pathE[i]) correct_cnt++;
+		}
+		result["match"] = correct_cnt / pathT.length;
+	}
 	return {
 		input: {
 			observations: observations

@@ -1,16 +1,16 @@
 const convert2log = require('../convert2log.js')
 
 class T {
-	constructor(prob = null, label = "") {
+	constructor(prob = null, path = "") {
 		this.prob = prob;
-		this.label = label;
+		this.path = path;
 	}
 }
 
-async function viterbi(observs, states, sp, tp, ep) {
-	await convert2log(sp);
-	await convert2log(tp);
-	await convert2log(ep);
+async function viterbi(observs, states, _sp, _tp, _ep) {
+	const sp = await convert2log(_sp);
+	const tp = await convert2log(_tp);
+	const ep = await convert2log(_ep);
 	let Ts = [];
 	for (const st of states) {
 		Ts[st] = new T(sp[st] + ep[st][observs[0]], st);
@@ -33,7 +33,7 @@ async function next_state(ob, states, Ts, tp, ep) {
 		for (const now_s of states) {
 			prob = Ts[now_s]["prob"] + tp[now_s][next_s];
 			if (!U[next_s] || U[next_s]["prob"] < prob) {
-				U[next_s] = new T(prob, Ts[now_s]["label"] + next_s);
+				U[next_s] = new T(prob, Ts[now_s]["path"] + next_s);
 			}
 		}
 	}

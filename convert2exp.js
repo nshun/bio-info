@@ -14,10 +14,7 @@ async function convert2log(list2exp) {
 		return explist;
 	};
 	const explist = await convert(list2exp);
-	for (const key in list2exp) {
-		list2exp[key] = explist[key];
-	}
-	return list2exp;
+	return explist;
 }
 
 module.exports = convert2log;

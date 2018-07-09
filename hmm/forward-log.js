@@ -9,16 +9,19 @@ class T {
 	}
 }
 
-async function forward(observs, states, sp, tp, ep) {
-	await convert2log(sp);
-	await convert2log(tp);
-	await convert2log(ep);
+async function forward(observs, states, _sp, _tp, _ep, options) {
+	const sp = await convert2log(_sp);
+	const tp = await convert2log(_tp);
+	const ep = await convert2log(_ep);
 	let Ts = [];
+	const Tss = [];
 	for (const st of states) {
 		Ts[st] = new T(sp[st] + ep[st][observs[0]]);
 	}
+	if (options && options.verbose) Tss.push(await convert2exp(Ts));
 	for (let i = 1; i < observs.length; i++) {
 		Ts = await next_state(observs[i], states, Ts, tp, ep);
+		if (options && options.verbose) Tss.push(await convert2exp(Ts));
 	}
 	let prob = 0;
 	for (const t in Ts) {
@@ -27,7 +30,8 @@ async function forward(observs, states, sp, tp, ep) {
 	const last_state = await arr2obj(await convert2exp(Ts));
 	return {
 		prob: prob,
-		last_state: last_state
+		last_state: last_state,
+		Tss: Tss ? Tss : undefined
 	};
 }
 
