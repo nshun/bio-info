@@ -1,7 +1,9 @@
-const convert2log = require('../convert2log.js')
+const arr2obj = require('../arr2obj');
+const convert2log = require('../convert2log.js');
+const convert2exp = require('../convert2exp.js');
 
 class T {
-	constructor(prob = null, scale = null) {
+	constructor(prob = null, scale) {
 		this.prob = prob;
 		this.scale = scale;
 	}
@@ -18,11 +20,15 @@ async function forward(observs, states, sp, tp, ep) {
 	for (let i = 1; i < observs.length; i++) {
 		Ts = await next_state(observs[i], states, Ts, tp, ep);
 	}
-	let sum = 0;
+	let prob = 0;
 	for (const t in Ts) {
-		sum += Math.exp(Ts[t]["prob"]);
+		prob += Math.exp(Ts[t]["prob"] + Math.log(1));
 	}
-	return new T(sum);
+	const last_state = await arr2obj(await convert2exp(Ts));
+	return {
+		prob: prob,
+		last_state: last_state
+	};
 }
 
 
@@ -36,7 +42,7 @@ async function next_state(ob, states, Ts, tp, ep) {
 		Us[next_s] = new T(Math.log(sum));
 	}
 	for (const state of states) {
-		Us[state]["prob"] += ep[state][ob]
+		Us[state]["prob"] += ep[state][ob];
 	}
 	return Us;
 }

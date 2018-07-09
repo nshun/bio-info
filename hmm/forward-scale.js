@@ -1,5 +1,7 @@
+const arr2obj = require('../arr2obj');
+
 class T {
-	constructor(prob = null, scale = null) {
+	constructor(prob = null, scale) {
 		this.prob = prob;
 		this.scale = scale;
 	}
@@ -23,7 +25,11 @@ async function forward(observs, states, sp, tp, ep) {
 	for (let i = 1; i < observs.length; i++) {
 		Ts = await next_state(observs[i], states, Ts, tp, ep);
 	}
-	return new T(Ts[states[0]]["scale"]);
+	const last_state = await arr2obj(Ts);
+	return {
+		prob: Ts[states[0]]["scale"],
+		last_state: last_state
+	};
 }
 
 
