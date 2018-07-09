@@ -3,11 +3,11 @@
 		"F",
 		"L"
 	],
-	"start_prob": {
+	"start_ratio": {
 		"F": 1,
 		"L": 1
 	},
-	"trans_prob": {
+	"trans_ratio": {
 		"F": {
 			"F": 95,
 			"L": 5
@@ -17,7 +17,7 @@
 			"L": 9
 		}
 	},
-	"emiss_prob": {
+	"emiss_ratio": {
 		"F": {
 			"1": 1,
 			"2": 1,

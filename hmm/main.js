@@ -4,9 +4,9 @@ const path = require('path');
 async function calc(argv) {
 	const {
 		states,
-		start_prob,
-		trans_prob,
-		emiss_prob
+		start_ratio,
+		trans_ratio,
+		emiss_ratio
 	} = require('../src/example-hmm-model');
 	const {
 		observations,

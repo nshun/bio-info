@@ -1,4 +1,4 @@
-const arr2obj = require('../arr2obj');
+const arr2obj = require('../utilities/arr2obj');
 const forward = require('./forward-log');
 const backward = require('./backward-log');
 

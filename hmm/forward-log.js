@@ -1,6 +1,6 @@
-const arr2obj = require('../arr2obj');
-const convert2log = require('../convert2log.js');
-const convert2exp = require('../convert2exp.js');
+const arr2obj = require('../utilities/arr2obj');
+const convert2log = require('../utilities/convert2log');
+const convert2exp = require('../utilities/convert2exp');
 
 class T {
 	constructor(variable, scale) {
