@@ -1,6 +1,5 @@
-const arr2obj = require('@utilities/arr2obj');
-const forward = require('./forward-log');
-const backward = require('./backward-log');
+const forward = require('@hmm/forward-log');
+const backward = require('@hmm/backward-log');
 
 async function posterior(observs, states, sp, tp, ep) {
     const path = [];

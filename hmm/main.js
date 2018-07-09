@@ -1,15 +1,23 @@
 const fs = require('fs');
 const p = require('path');
 const ratio2prob = require('@utilities/ratio2prob');
-const createInput = require('./create-input');
 
-async function calc(opitons) {
+async function calc(options) {
+	if (options.method === 'compare') {
+		const calc = require('@hmm/compare');
+		return await calc(options);
+	}
+
+	const methodpath = p.resolve(options.method ? `./hmm/${options.method}.js` : `./hmm/viterbi.js`);
+	if (!fs.existsSync(methodpath) || !fs.statSync(methodpath).isFile())
+		return Promise.reject(new Error(`method=${options.method} is not found.`));
+
 	const {
 		states,
 		start_ratio,
 		trans_ratio,
 		emiss_ratio
-	} = opitons.model ? opitons.model : require('../src/example-hmm-model');
+	} = options.model ? options.model : require('@src/example-hmm-model');
 	const start_prob = await ratio2prob(start_ratio);
 	const trans_prob = await ratio2prob(trans_ratio);
 	const emiss_prob = await ratio2prob(emiss_ratio);
@@ -17,13 +25,8 @@ async function calc(opitons) {
 	const {
 		observations,
 		actual_path
-	} = opitons.input ? opitons.input : require('../src/example-hmm-input');
+	} = options.input ? options.input : require('@src/example-hmm-input');
 
-
-	const methodpath = p.resolve(opitons.method ?
-		`./hmm/${opitons.method}.js` : `./hmm/viterbi.js`);
-	if (!fs.existsSync(methodpath) || !fs.statSync(methodpath).isFile())
-		return Promise.reject(new Error(`method=${opitons.method} is not found.`));
 	const calc = require(methodpath);
 	const result = await calc(observations.split(''), states,
 		start_prob, trans_prob, emiss_prob);

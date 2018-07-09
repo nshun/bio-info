@@ -11,7 +11,9 @@
 			"program": "${workspaceFolder}\\index.js",
 			"args": [
 				"--kind=hmm",
-				"--method=posterior-decoding"
+				"--method=compare",
+				"--loop=1",
+				"--length=300"
 			]
 		}
 	]

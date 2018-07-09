@@ -10,8 +10,10 @@
     "path": "^0.12.7"
   },
   "_moduleAliases": {
-    "@src": "lib",
-    "@utilities": "utilities"
+    "@root": ".",
+    "@src": "src",
+    "@utilities": "utilities",
+    "@hmm": "hmm"
   },
   "devDependencies": {},
   "scripts": {
@@ -21,7 +23,8 @@
     "hw3": "node index.js --kind=global",
     "hw5": "node index.js --kind=hmm --method=viterbi",
     "hw6": "node index.js --kind=hmm --method=forward-log && node index.js --kind=hmm --method=forward-scale",
-    "hw7": "node index.js --kind=hmm --method=backward-log && node index.js --kind=hmm --method=backward-scale"
+    "hw7": "node index.js --kind=hmm --method=backward-log && node index.js --kind=hmm --method=backward-scale",
+    "hw8": "node ./hmm/compare.js"
   },
   "repository": {
     "type": "git",
