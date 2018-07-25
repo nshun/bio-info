@@ -44,7 +44,6 @@ async function run(argv) {
 	});
 	const result = {
 		inputs: seqs,
-		options: argv,
 		alignments: alignments,
 		elapsedMs: averageTimeMs
 	};

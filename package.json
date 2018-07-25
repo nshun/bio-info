@@ -5,11 +5,26 @@
   "main": "index.js",
   "dependencies": {
     "csv-parse": "^2.4.0",
-    "optimist": "^0.6.1"
+    "module-alias": "^2.1.0",
+    "optimist": "^0.6.1",
+    "path": "^0.12.7"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@src": "src",
+    "@utilities": "utilities",
+    "@hmm": "hmm"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "init": "npm i",
+    "hw1": "node index.js --kind=hmm",
+    "hw2": "node index.js --kind=local --src=../src/dest100.json --loop=10",
+    "hw3": "node index.js --kind=global",
+    "hw5": "node index.js --kind=hmm --method=viterbi",
+    "hw6": "node index.js --kind=hmm --method=forward-log && node index.js --kind=hmm --method=forward-scale",
+    "hw7": "node index.js --kind=hmm --method=backward-log && node index.js --kind=hmm --method=backward-scale",
+    "hw8": "node index.js --kind=hmm --method=compare"
   },
   "repository": {
     "type": "git",

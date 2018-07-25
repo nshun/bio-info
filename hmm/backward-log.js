@@ -4,52 +4,50 @@ const convert2exp = require('@utilities/convert2exp');
 const logsumexp = require('@utilities/logsumexp');
 
 class T {
-	constructor(variable, scale) {
+	constructor(variable) {
 		this.variable = variable;
-		this.scale = scale;
 	}
 }
 
-async function forward(observs, states, _sp, _tp, _ep, options) {
+async function backward(observs, states, _sp, _tp, _ep, options) {
 	const sp = await convert2log(_sp);
 	const tp = await convert2log(_tp);
 	const ep = await convert2log(_ep);
 	let Ts = [];
 	const Tss = [];
 	for (const st of states) {
-		Ts[st] = new T(sp[st] + ep[st][observs[0]]);
+		Ts[st] = new T(Math.log(1));
 	}
 	if (options && options.verbose) Tss.push(Ts);
-	for (let i = 1; i < observs.length; i++) {
-		Ts = await next_state(observs[i], states, Ts, tp, ep);
+	for (let i = 0; i < observs.length - 1; i++) {
+		const j = observs.length - i - 1;
+		Ts = await prev_state(observs[j], states, Ts, tp, ep);
 		if (options && options.verbose) Tss.push(Ts);
 	}
-	let prob = 0;
+	const arr = [];
 	for (const t in Ts) {
-		prob += Math.exp(Ts[t]["variable"] + Math.log(1));
+		arr.push(sp[t] + ep[t][observs[0]] + Ts[t]["variable"]);
 	}
+	const prob = logsumexp(arr);
 	const last_state = await arr2obj(await convert2exp(Ts));
 	return {
-		prob: prob,
+		prob: Math.exp(prob),
 		last_state: last_state,
-		Tss: Tss ? Tss : undefined
-	};
+		Tss: Tss ? Tss.reverse() : undefined
+	}
 }
 
 
-async function next_state(ob, states, Ts, tp, ep) {
+async function prev_state(ob, states, Ts, tp, ep) {
 	const Us = [];
 	for (const next_s of states) {
 		const arr = [];
 		for (const now_s of states) {
-			arr.push(Ts[now_s]["variable"] + tp[now_s][next_s]);
+			arr.push(ep[now_s][ob] + Ts[now_s]["variable"] + tp[next_s][now_s]);
 		}
 		Us[next_s] = new T(logsumexp(arr));
-	}
-	for (const state of states) {
-		Us[state]["variable"] += ep[state][ob];
 	}
 	return Us;
 }
 
-module.exports = forward;
+module.exports = backward;

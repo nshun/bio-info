@@ -14,9 +14,7 @@ async function convert2log(list2log) {
 		return loglist;
 	};
 	loglist = await convert(list2log);
-	for (const key in list2log) {
-		list2log[key] = loglist[key];
-	}
+	return loglist;
 }
 
 module.exports = convert2log;

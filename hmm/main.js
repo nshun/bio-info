@@ -1,52 +1,52 @@
-const states = ["F", "L"];
-const start_prob = {
-	"F": 0.5,
-	"L": 0.5
-};
-const trans_prob = {
-	"F": {
-		"F": 0.95,
-		"L": 0.05
-	},
-	"L": {
-		"F": 0.1,
-		"L": 0.9
-	}
-}
-const emiss_prob = {
-	'F': {
-		'1': 1 / 6,
-		'2': 1 / 6,
-		'3': 1 / 6,
-		'4': 1 / 6,
-		'5': 1 / 6,
-		'6': 1 / 6
-	},
-	'L': {
-		'1': 1 / 10,
-		'2': 1 / 10,
-		'3': 1 / 10,
-		'4': 1 / 10,
-		'5': 1 / 10,
-		'6': 1 / 2
-	}
-}
+const fs = require('fs');
+const p = require('path');
+const ratio2prob = require('@utilities/ratio2prob');
 
 async function calc(options) {
+	if (options.method === 'compare') {
+		const calc = require('@hmm/compare');
+		return await calc(options);
+	}
+
+	const methodpath = p.resolve(options.method ? `./hmm/${options.method}.js` : `./hmm/viterbi.js`);
+	if (!fs.existsSync(methodpath) || !fs.statSync(methodpath).isFile())
+		return Promise.reject(new Error(`method=${options.method} is not found.`));
+
 	const {
-		observations
-	} = require('../src/example-hmm');
-	const calc = require('./forward-scale.js'); // require('./viterbi.js');
+		states,
+		start_ratio,
+		trans_ratio,
+		emiss_ratio
+	} = options.model ? options.model : require('@src/example-hmm-model');
+	const start_prob = await ratio2prob(start_ratio);
+	const trans_prob = await ratio2prob(trans_ratio);
+	const emiss_prob = await ratio2prob(emiss_ratio);
+
+	const {
+		observations,
+		actual_path
+	} = options.input ? options.input : require('@src/example-hmm-input');
+
+	const calc = require(methodpath);
 	const result = await calc(observations.split(''), states,
 		start_prob, trans_prob, emiss_prob);
+
+	if (result && result["path"]) {
+		const pathT = actual_path.split('');
+		const pathE = result["path"].split('');
+		let correct_cnt = 0;
+		for (let i = 0; i < pathT.length; i++) {
+			if (pathT[i] === pathE[i]) correct_cnt++;
+		}
+		result["match"] = correct_cnt / pathT.length;
+	}
+
 	return {
 		input: {
-			observations: observations
+			observations: observations,
+			actual_path: actual_path
 		},
-		output: {
-			prob: Math.exp(result["prob"]),
-			path: result["label"]
-		}
+		output: result
 	}
 }
 
