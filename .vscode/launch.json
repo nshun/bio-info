@@ -10,10 +10,7 @@
 			"name": "プログラムの起動",
 			"program": "${workspaceFolder}\\index.js",
 			"args": [
-				"--kind=hmm",
-				"--method=compare",
-				"--loop=100",
-				"--length=10000"
+				"--kind=bw"
 			]
 		}
 	]
