@@ -9,6 +9,7 @@ class T {
 
 async function forward(observs, states, sp, tp, ep) {
 	let Ts = [];
+	const Tss = [];
 	let scale = 0;
 	for (const l of states) {
 		let sumF = 0;
@@ -22,13 +23,16 @@ async function forward(observs, states, sp, tp, ep) {
 		const variable = ep[l][observs[0]] / scale * sumF;
 		Ts[l] = new T(variable, scale);
 	}
+	if (options && options.verbose) Tss.push(Ts);
 	for (let i = 1; i < observs.length; i++) {
 		Ts = await next_state(observs[i], states, Ts, tp, ep);
+		if (options && options.verbose) Tss.push(Ts);
 	}
 	const last_state = await arr2obj(Ts);
 	return {
 		prob: Ts[states[0]]["scale"],
-		last_state: last_state
+		last_state: last_state,
+		Tss: Tss ? Tss : undefined
 	};
 }
 

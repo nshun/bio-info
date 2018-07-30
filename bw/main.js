@@ -1,7 +1,7 @@
 const ratio2prob = require('@utilities/ratio2prob');
 const createInput = require('@hmm/create-input');
-const forward = require('@hmm/forward-log');
-const backward = require('@hmm/backward-log');
+const forward = require('@hmm/forward-scale');
+const backward = require('@hmm/backward-scale');
 
 async function calc(options) {
 	const {

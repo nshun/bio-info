@@ -9,12 +9,15 @@ class T {
 
 async function backward(observs, states, sp, tp, ep) {
 	let Ts = [];
+	const Tss = [];
 	for (const l of states) {
 		Ts[l] = new T(1, 1);
 	}
+	if (options && options.verbose) Tss.push(Ts);
 	for (let i = 0; i < observs.length - 1; i++) {
 		const l = observs.length - i - 1;
 		Ts = await prev_state(observs[l], states, Ts, tp, ep);
+		if (options && options.verbose) Tss.push(Ts);
 	}
 	let scale = 0;
 	for (const l of states) {
