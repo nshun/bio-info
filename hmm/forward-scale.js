@@ -1,9 +1,10 @@
 const arr2obj = require('@utilities/arr2obj');
 
 class T {
-	constructor(variable = null, scale) {
+	constructor(variable = null, scale, tS) {
 		this.variable = variable;
 		this.scale = scale;
+		this.tS = tS;
 	}
 }
 
@@ -21,7 +22,7 @@ async function forward(observs, states, sp, tp, ep, options) {
 	for (const l of states) {
 		const sumF = 1 * sp[l];
 		const variable = ep[l][observs[0]] / scale * sumF;
-		Ts[l] = new T(variable, Math.log(scale));
+		Ts[l] = new T(variable, Math.log(scale), scale);
 	}
 	if (options && options.verbose) Tss.push(Ts);
 	for (let i = 1; i < observs.length; i++) {
@@ -53,7 +54,7 @@ async function next_state(ob, states, Ts, tp, ep) {
 			sumF += Ts[k]["variable"] * tp[k][l];
 		}
 		const variable = ep[l][ob] / scale * sumF;
-		Us[l] = new T(variable, Ts[states[0]]["scale"] + Math.log(scale));
+		Us[l] = new T(variable, Ts[states[0]]["scale"] + Math.log(scale), scale);
 	}
 	return Us;
 }

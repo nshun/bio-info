@@ -10,7 +10,9 @@
 			"name": "プログラムの起動",
 			"program": "${workspaceFolder}\\index.js",
 			"args": [
-				"--kind=bw"
+				"--kind=bw",
+				"--method=hw",
+				"--length=30000"
 			]
 		}
 	]
