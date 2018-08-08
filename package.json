@@ -25,7 +25,7 @@
     "hw6": "node index.js --kind=hmm --method=forward-log && node index.js --kind=hmm --method=forward-scale",
     "hw7": "node index.js --kind=hmm --method=backward-scale && node index.js --kind=hmm --method=backward-scale",
     "hw8": "node index.js --kind=hmm --method=compare",
-    "hw9": "node index.js --kind=bw --method=hw"
+    "hw9": "node index.js --kind=bw --method=hw --length=300 && node index.js --kind=bw --method=hw --length=30000"
   },
   "repository": {
     "type": "git",
